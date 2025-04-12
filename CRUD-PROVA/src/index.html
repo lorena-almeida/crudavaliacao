@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>RPG</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+            background-image: url("src/GBa736LXoAM9Uof.jpeg");
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        header {
+            background: #152433;
+            color: rgb(255, 255, 255);
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .flex-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .panel {
+            background: rgb(255, 255, 255);
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            flex: 1;
+            min-width: 300px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            background: #93679c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+        button:hover {
+            background: #3f0b49;
+        }
+        .btn-danger {
+            background: #e74c3c;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #f8f9fa;
+        }
+        .alert {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .alert-error {
+            background: #fdecea;
+            color: #d32f2f;
+        }
+        .alert-success {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sistema de RPG</h1>
+    </header>
+    <div class="flex-container">
+        <div class="panel">
+            <h2>👥 Controle de Personagens</h2>
+            <form id="charForm">
+                <input type="hidden" id="charId">
+                <div class="form-group">
+                    <label for="charName">Nome do Personagem</label>
+                    <input type="text" id="charName" placeholder="Ex: Lorena" required>
+                </div>
+                <div class="form-group">
+                    <label for="playerName">Nome Aventureiro</label>
+                    <input type="text" id="playerName" placeholder="Nickname" required>
+                </div>
+                <div class="form-group">
+                    <label for="charClass">Classe</label>
+                    <select id="charClass" required>
+                        <option value=""> Escolha </option>
+                        <option value="Guerreiro">Guerreiro</option>
+                        <option value="Mago">Mago</option>
+                        <option value="Ladino">Ladino</option>
+                        <option value="Arqueiro">Arqueiro</option>
+                        <option value="Bardo">Bardo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="charLevel">Nível</label>
+                    <input type="number" id="charLevel" min="1" value="1" required>
+                </div>
+                <div class="form-group">
+                    <label>Atributos (10 pontos somando os dois*)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label for="charStr">Força</label>
+                            <input type="number" id="charStr" min="0" max="10" value="5" required>
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="charDef">Defesa</label>
+                            <input type="number" id="charDef" min="0" max="10" value="5" required>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit">Salvar</button>
+                    <button type="button" id="cancelBtn" class="btn-danger">Cancelar</button>
+                </div>
+                <div id="charMessage" class="alert" style="display: none;"></div>
+            </form>
+            <h3>Personagens Cadastrados</h3>
+            <div style="overflow-x: auto;">
+                <table id="charsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Classe</th>
+                            <th>Nível</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel">
+            <h2>✨ Itens Mágicos</h2>
+            <form id="itemForm">
+                <input type="hidden" id="itemId">
+                <div class="form-group">
+                    <label for="itemName">Nome do Item</label>
+                    <input type="text" id="itemName" placeholder="Ex: Cadinho de Mikael" required>
+                </div>
+                <div class="form-group">
+                    <label for="itemType">Tipo</label>
+                    <select id="itemType" required>
+                        <option value="">Selecione</option>
+                        <option value="Arma">Arma</option>
+                        <option value="Armadura">Armadura</option>
+                        <option value="Amuleto">Amuleto</option>
+                    </select>
+                </div>
+                <div class="form-group" id="strGroup">
+                    <label for="itemStr">Bônus de Força</label>
+                    <input type="number" id="itemStr" min="0" max="10" value="0" required>
+                </div>
+                <div class="form-group" id="defGroup">
+                    <label for="itemDef">Bônus de Defesa</label>
+                    <input type="number" id="itemDef" min="0" max="10" value="0" required>
+                </div>
+                <div>
+                    <button type="submit">Salvar Item</button>
+                    <button type="button" id="cancelItemBtn" class="btn-danger">Cancelar</button>
+                </div>
+                <div id="itemMessage" class="alert" style="display: none;"></div>
+            </form>
+            <h3>Inventário</h3>
+            <table id="itemsTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Força</th>
+                        <th>Defesa</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel" style="margin-top: 20px;">
+        <h2>🔗 Vincular Itens</h2>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <div style="flex: 1; min-width: 200px;">
+                <label for="selectChar">Personagem</label>
+                <select id="selectChar" style="width: 100%;"></select>
+            </div>
+            
+            <div style="flex: 1; min-width: 200px;">
+                <label for="selectItem">Item Mágico</label>
+                <select id="selectItem" style="width: 100%;"></select>
+            </div>
+            
+            <div style="align-self: flex-end;">
+                <button id="linkBtn" style="margin-top: 0;">Vincular</button>
+            </div>
+        </div>
+        <div id="linkMessage" class="alert" style="display: none; margin-top: 10px;"></div>
+        <h3 style="margin-top: 20px;">Itens Equipados</h3>
+        <div id="charItems"></div>
+    </div>
+    <script src="rpg.js"></script>
+</body>
+</html>
